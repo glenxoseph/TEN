@@ -252,17 +252,32 @@ public class TicTacToe {
 			}
 		}
 	}
+	
+	static void ai() {
+		for (int i = 0; i < availableMatrix.length; i++) {
+			for (int j = 0; j < availableMatrix[i].length; j++) {
+				if (availableMatrix[i][j] == true) {
+					matrix[i][j] = turn;
+					nextMatrix = j;
+					break;
+				}
+			}
+		}
+	}
 
 	public static void main(String[] args) {
 		initialize();
 		while (true) {
 			printSuperMatrix();
 			printMatrix();
+			System.out.println("next matrix = " + nextMatrix);
 			if (turn == 'O') {
 				aiCheckAvailable();
+				ai();
+			} else if (turn == 'X') {
+			    determineNextMatrix();
+			    assign();
 			}
-		    determineNextMatrix();
-		    assign();
 			assignSuperMatrix();
 			if (winOrTie(superMatrix) != 0) {
 				if (winOrTie(superMatrix) == 'X') {
