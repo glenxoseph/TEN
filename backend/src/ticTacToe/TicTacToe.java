@@ -261,7 +261,7 @@ public class TicTacToe {
 				if (availableMatrix[i][j] == true) {
 					matrix[i][j] = turn;
 					System.out.println("line 263");
-					int score = minimax(matrix, 5, true);
+					int score = minimax(matrix, 10, -100, 100, true);
 					System.out.println("line 265");
 					matrix[i][j] = ' ';
 					if (score > bestScore) {
@@ -277,7 +277,7 @@ public class TicTacToe {
 		nextMatrix = bestMove[1];
 	}
 	
-	static int minimax(char[][] game, int depth, boolean isMax) {
+	static int minimax(char[][] game, int depth, int alpha, int beta, boolean isMax) {
 		int returnVal = 0;
 		
 		// base case
@@ -312,9 +312,13 @@ public class TicTacToe {
 				for (int j = 0; j < availableMatrix[i].length; j++) {
 					if (availableMatrix[i][j] == true) {
 						matrix[i][j] = turn;
-						int score = minimax(matrix, depth - 1, false);
+						int score = minimax(matrix, depth - 1, alpha, beta, false);
 						matrix[i][j] = ' ';
+						alpha = Math.max(alpha, score);
 						bestScore = Math.max(score, bestScore);
+						if (beta <= alpha) {
+							break;
+						}
 					}
 				}
 			}
@@ -327,9 +331,13 @@ public class TicTacToe {
 				for (int j = 0; j < availableMatrix[i].length; j++) {
 					if (availableMatrix[i][j] == true) {
 						matrix[i][j] = turn;
-						int score = minimax(matrix, depth - 1, true);
+						int score = minimax(matrix, depth - 1, alpha, beta, true);
 						matrix[i][j] = ' ';
+						beta = Math.min(beta, score);
 						bestScore = Math.min(score, bestScore);
+						if (beta <= alpha) {
+							break;
+						}
 					}
 				}
 			}
