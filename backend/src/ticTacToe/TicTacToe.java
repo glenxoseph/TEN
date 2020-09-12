@@ -1,9 +1,9 @@
 package ticTacToe;
-
-import java.nio.file.AtomicMoveNotSupportedException;
 import java.util.Scanner;
 
-import org.omg.CORBA.TRANSACTION_UNAVAILABLE;
+import com.sun.javafx.geom.Matrix3f;
+import com.sun.org.apache.bcel.internal.generic.RETURN;
+import com.sun.security.auth.NTDomainPrincipal;
 
 public class TicTacToe {
 	static Scanner scan = new Scanner(System.in);
@@ -254,15 +254,88 @@ public class TicTacToe {
 	}
 	
 	static void ai() {
+		int bestScore = -100000;
+		int[] bestMove = {0, 0};
 		for (int i = 0; i < availableMatrix.length; i++) {
 			for (int j = 0; j < availableMatrix[i].length; j++) {
 				if (availableMatrix[i][j] == true) {
 					matrix[i][j] = turn;
-					nextMatrix = j;
-					break;
+					System.out.println("line 263");
+					int score = minimax(matrix, 5, true);
+					System.out.println("line 265");
+					matrix[i][j] = ' ';
+					if (score > bestScore) {
+						bestScore = score;
+						bestMove[0] = i;
+						bestMove[1] = j;
+					}
+					System.out.println("Score at " + i + ", " + j + " is " + bestScore);
 				}
 			}
 		}
+		matrix[bestMove[0]][bestMove[1]] = 'O';
+		nextMatrix = bestMove[1];
+	}
+	
+	static int minimax(char[][] game, int depth, boolean isMax) {
+		int returnVal = 0;
+		
+		// base case
+		boolean Xwon = winOrTie(superMatrix) == 'X';
+		boolean Owon = winOrTie(superMatrix) == 'O';
+		boolean tie = winOrTie(superMatrix) == '/';
+		
+		for (int i = 0; i < superMatrix.length; i++) {
+			if (superMatrix[i] == 'X') {
+				returnVal -= 1;
+			}
+			else if (superMatrix[i] == 'O') {
+				returnVal += 1;
+			}
+		}
+		
+		if (Xwon) {
+			return -10;
+		}
+		
+		else if (Owon) {
+			return 10;
+		}
+		
+		else if (tie || depth == 0) {
+			return returnVal;
+		}
+		
+		if (isMax) {
+			int bestScore = -100000;
+			for (int i = 0; i < availableMatrix.length; i++) {
+				for (int j = 0; j < availableMatrix[i].length; j++) {
+					if (availableMatrix[i][j] == true) {
+						matrix[i][j] = turn;
+						int score = minimax(matrix, depth - 1, false);
+						matrix[i][j] = ' ';
+						bestScore = Math.max(score, bestScore);
+					}
+				}
+			}
+			return bestScore;
+		}
+		
+		else if (!isMax) {
+			int bestScore = 100000;
+			for (int i = 0; i < availableMatrix.length; i++) {
+				for (int j = 0; j < availableMatrix[i].length; j++) {
+					if (availableMatrix[i][j] == true) {
+						matrix[i][j] = turn;
+						int score = minimax(matrix, depth - 1, true);
+						matrix[i][j] = ' ';
+						bestScore = Math.min(score, bestScore);
+					}
+				}
+			}
+			return bestScore;
+		}
+		return 0;
 	}
 
 	public static void main(String[] args) {
@@ -280,19 +353,15 @@ public class TicTacToe {
 			}
 			assignSuperMatrix();
 			if (winOrTie(superMatrix) != 0) {
+				printSuperMatrix();
+				printMatrix();
 				if (winOrTie(superMatrix) == 'X') {
-					printSuperMatrix();
-					printMatrix();
 					System.out.println("X wins! ");
 					break;
 				} else if (winOrTie(superMatrix) == 'O') {
-					printSuperMatrix();
-					printMatrix();
 					System.out.println("O wins! ");
 					break;
 				} else if (winOrTie(superMatrix) == '/') {
-					printSuperMatrix();
-					printMatrix();
 					System.out.println("Tie! ");
 					break;
 				}
