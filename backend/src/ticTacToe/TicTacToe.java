@@ -318,10 +318,10 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		for (int i = 0; i < availableMatrix.length; i++) {
 			for (int j = 0; j < availableMatrix[i].length; j++) {
 				if (availableMatrix[i][j] == true) {
-					aiCheckAvailable();
+//					aiCheckAvailable();
 					matrix[i][j] = 'O';
 					tempNextMatrix = j;
-					int score = minimax(matrix, 100, -100, 100, false);
+					int score = minimax(matrix, 100, -10000, 10000, false);
 					System.out.println("score at " + i + ", " + j + " is " + score);
 					matrix[i][j] = ' ';
 					if (score > bestScore) {
@@ -382,7 +382,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		}
 		
 		else if (tie) {
-			score = 0;
+			// no change to score
 			System.out.println("Tie here!");
 		}
 		
@@ -391,35 +391,45 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 	
 	static boolean finished() {
 		
-		char[] tempSuperMatrixatrix = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
-		assignMatrix(tempSuperMatrixatrix);
+		char[] tempSuperMatrix = {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '};
+		assignMatrix(tempSuperMatrix);
 		
-		if ((tempSuperMatrixatrix[0] == 'X' && tempSuperMatrixatrix[1] == 'X' && tempSuperMatrixatrix[2] == 'X')
-				|| (tempSuperMatrixatrix[3] == 'X' && tempSuperMatrixatrix[4] == 'X' && tempSuperMatrixatrix[5] == 'X')
-				|| (tempSuperMatrixatrix[6] == 'X' && tempSuperMatrixatrix[7] == 'X' && tempSuperMatrixatrix[8] == 'X')
-				|| (tempSuperMatrixatrix[0] == 'X' && tempSuperMatrixatrix[3] == 'X' && tempSuperMatrixatrix[6] == 'X')
-				|| (tempSuperMatrixatrix[1] == 'X' && tempSuperMatrixatrix[4] == 'X' && tempSuperMatrixatrix[7] == 'X')
-				|| (tempSuperMatrixatrix[2] == 'X' && tempSuperMatrixatrix[5] == 'X' && tempSuperMatrixatrix[8] == 'X')
-				|| (tempSuperMatrixatrix[0] == 'X' && tempSuperMatrixatrix[4] == 'X' && tempSuperMatrixatrix[8] == 'X')
-				|| (tempSuperMatrixatrix[2] == 'X' && tempSuperMatrixatrix[4] == 'X' && tempSuperMatrixatrix[6] == 'X')) {
+		if ((tempSuperMatrix[0] == 'X' && tempSuperMatrix[1] == 'X' && tempSuperMatrix[2] == 'X')
+				|| (tempSuperMatrix[3] == 'X' && tempSuperMatrix[4] == 'X' && tempSuperMatrix[5] == 'X')
+				|| (tempSuperMatrix[6] == 'X' && tempSuperMatrix[7] == 'X' && tempSuperMatrix[8] == 'X')
+				|| (tempSuperMatrix[0] == 'X' && tempSuperMatrix[3] == 'X' && tempSuperMatrix[6] == 'X')
+				|| (tempSuperMatrix[1] == 'X' && tempSuperMatrix[4] == 'X' && tempSuperMatrix[7] == 'X')
+				|| (tempSuperMatrix[2] == 'X' && tempSuperMatrix[5] == 'X' && tempSuperMatrix[8] == 'X')
+				|| (tempSuperMatrix[0] == 'X' && tempSuperMatrix[4] == 'X' && tempSuperMatrix[8] == 'X')
+				|| (tempSuperMatrix[2] == 'X' && tempSuperMatrix[4] == 'X' && tempSuperMatrix[6] == 'X')) {
 			return true;
-		} else if ((tempSuperMatrixatrix[0] == 'O' && tempSuperMatrixatrix[1] == 'O' && tempSuperMatrixatrix[2] == 'O')
-				|| (tempSuperMatrixatrix[3] == 'O' && tempSuperMatrixatrix[4] == 'O' && tempSuperMatrixatrix[5] == 'O')
-				|| (tempSuperMatrixatrix[6] == 'O' && tempSuperMatrixatrix[7] == 'O' && tempSuperMatrixatrix[8] == 'O')
-				|| (tempSuperMatrixatrix[0] == 'O' && tempSuperMatrixatrix[3] == 'O' && tempSuperMatrixatrix[6] == 'O')
-				|| (tempSuperMatrixatrix[1] == 'O' && tempSuperMatrixatrix[4] == 'O' && tempSuperMatrixatrix[7] == 'O')
-				|| (tempSuperMatrixatrix[2] == 'O' && tempSuperMatrixatrix[5] == 'O' && tempSuperMatrixatrix[8] == 'O')
-				|| (tempSuperMatrixatrix[0] == 'O' && tempSuperMatrixatrix[4] == 'O' && tempSuperMatrixatrix[8] == 'O')
-				|| (tempSuperMatrixatrix[2] == 'O' && tempSuperMatrixatrix[4] == 'O' && tempSuperMatrixatrix[6] == 'O')) {
+		} else if ((tempSuperMatrix[0] == 'O' && tempSuperMatrix[1] == 'O' && tempSuperMatrix[2] == 'O')
+				|| (tempSuperMatrix[3] == 'O' && tempSuperMatrix[4] == 'O' && tempSuperMatrix[5] == 'O')
+				|| (tempSuperMatrix[6] == 'O' && tempSuperMatrix[7] == 'O' && tempSuperMatrix[8] == 'O')
+				|| (tempSuperMatrix[0] == 'O' && tempSuperMatrix[3] == 'O' && tempSuperMatrix[6] == 'O')
+				|| (tempSuperMatrix[1] == 'O' && tempSuperMatrix[4] == 'O' && tempSuperMatrix[7] == 'O')
+				|| (tempSuperMatrix[2] == 'O' && tempSuperMatrix[5] == 'O' && tempSuperMatrix[8] == 'O')
+				|| (tempSuperMatrix[0] == 'O' && tempSuperMatrix[4] == 'O' && tempSuperMatrix[8] == 'O')
+				|| (tempSuperMatrix[2] == 'O' && tempSuperMatrix[4] == 'O' && tempSuperMatrix[6] == 'O')) {
 			return true;
 		} else {
-			for (int i = 0; i < tempSuperMatrixatrix.length; i++) {
-				if (tempSuperMatrixatrix[i] == ' ') {
-					return false;
+			int count = 0;
+			for (int i = 0; i < tempSuperMatrix.length; i++) {
+				if (tempSuperMatrix[i] == 'X' || tempSuperMatrix[i] == 'O' || tempSuperMatrix[i] == '/') {
+					count++;
 				}
 			}
-			return true;
+			System.out.println("COUNT IS " + count);
+			if (count >= tempSuperMatrix.length) {
+
+				return true;
+			}
+			else {
+				return false;
+			}
+
 		}
+		
 	}
 	
 	static int minimax(char[][] game, int depth, int alpha, int beta, boolean isMax) {
@@ -427,21 +437,23 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		System.out.println("depth = " + depth);
 //		printMatrix();
 		
-		if(depth == 0 || finished()) {
+		if (depth == 0 || finished()) {
 			System.out.println("REACHED THE END");
 			return eval();
 		}
 		
 		
 		if (isMax) {
-			int bestScore = -10000;
+			System.out.println("isMax");
+			int bestScore = -9;
 			for (int i = 0; i < tempAvailableMatrix.length; i++) {
 				for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
 					if (tempAvailableMatrix[i][j] == true) {
 						game[i][j] = 'O';
 						tempNextMatrix = j;
-						System.out.println("temp = " + tempNextMatrix);
-						int score = minimax(game, depth - 1, alpha, beta, false);
+						System.out.println("tempNM = " + tempNextMatrix);
+						int score = 0;
+						score = minimax(game, depth - 1, alpha, beta, false);
 						System.out.println("line 442 score = " + score);
 						game[i][j] = ' ';
 						alpha = Math.max(alpha, score);
@@ -456,14 +468,16 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		}
 		
 		else if (!isMax) {
-			int bestScore = 10000;
+			System.out.println("isNotMax");
+			int bestScore = 9;
 			for (int i = 0; i < tempAvailableMatrix.length; i++) {
 				for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
 					if (tempAvailableMatrix[i][j] == true) {
 						game[i][j] = 'X';
 						tempNextMatrix = j;
-						System.out.println("temp = " + tempNextMatrix);
-						int score = minimax(game, depth - 1, alpha, beta, true);
+						System.out.println("tempNM = " + tempNextMatrix);
+						int score = 0;
+						score = minimax(game, depth - 1, alpha, beta, true);
 						System.out.println("line 464 score = " + score);
 						game[i][j] = ' ';
 						beta = Math.min(beta, score);
