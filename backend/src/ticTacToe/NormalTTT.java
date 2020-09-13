@@ -2,6 +2,8 @@ package ticTacToe;
 
 import java.util.Scanner;
 
+import com.sun.org.apache.xalan.internal.xsltc.compiler.Template;
+
 public class NormalTTT {
 	
 	static Scanner scan = new Scanner(System.in);
@@ -90,11 +92,12 @@ public class NormalTTT {
 	}
 	
 	static void ai() {
+		char temp = turn;
 		int bestScore = -10000;
 		int bestMove = 10;
 		for (int i = 0; i < matrix.length; i++) {
 			if (matrix[i] == ' ') {
-				matrix[i] = turn;
+				matrix[i] = temp;
 				int score = minimax(-100, 100, false);
 				System.out.println("SCORE at " + i + " is " + score);
 				matrix[i] = ' ';
@@ -108,21 +111,29 @@ public class NormalTTT {
 			System.out.println("fail!");
 		}
 		else {
-			matrix[bestMove] = turn;
-			System.out.println("O at " + bestMove);
+			matrix[bestMove] = temp;
+			turn = temp;
+			System.out.println(turn + " at " + bestMove);
 		}
 	}
 	
 	
 	static int minimax(int alpha, int beta, boolean isMax) {
-		
+		char a = turn;
+		char b = ' ';
+		if (turn == 'O') {
+			b = 'X';
+		}
+		else if (turn == 'X') {
+			b = 'O';
+		}
 //		printMatrix();
 		
-		if (checkWin() == 'X') {
+		if (checkWin() == b) {
 //			System.out.println("X loses here!!!!!!!");
 			return -10;
 		}
-		else if (checkWin() == 'O') {
+		else if (checkWin() == a) {
 //			System.out.println("O loses here!!!!!!!");
 			return 10;
 		}
@@ -135,7 +146,8 @@ public class NormalTTT {
 			int bestScore = -1000;
 			for (int i = 0; i < matrix.length; i++) {
 				if (matrix[i] == ' ') {
-					matrix[i] = 'O';
+					matrix[i] = a;
+//					System.out.println("should be o " + a);
 //					System.out.println("O at " + i);
 					int sc = minimax(alpha, beta, false);
 					matrix[i] = ' ';
@@ -153,7 +165,8 @@ public class NormalTTT {
 			int bestScore = 1000;
 			for (int i = 0; i < matrix.length; i++) {
 				if (matrix[i] == ' ') {
-					matrix[i] = 'X';
+					matrix[i] = b;
+//					System.out.println("should be x " + b);
 //					System.out.println("X at " + i);
 					int sc = minimax(alpha, beta, true);
 					matrix[i] = ' ';
@@ -176,10 +189,12 @@ public class NormalTTT {
 			System.out.println(turn + "'s turn! ");
 			printMatrix();
 			if (turn == 'X') {
-				makeMove();
+//				makeMove();
+				ai();
 			}
 			else if (turn == 'O') {
-				ai();
+				makeMove();
+//				ai();
 			}
 			if (checkWin() == 'X') {
 				printMatrix();

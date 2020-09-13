@@ -321,7 +321,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 //					aiCheckAvailable();
 					matrix[i][j] = 'O';
 					tempNextMatrix = j;
-					int score = minimax(matrix, 100, -10000, 10000, false);
+					int score = minimax(-10000, 10000, false);
 					System.out.println("score at " + i + ", " + j + " is " + score);
 					matrix[i][j] = ' ';
 					if (score > bestScore) {
@@ -419,9 +419,9 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 					count++;
 				}
 			}
-			System.out.println("COUNT IS " + count);
+//			System.out.println("COUNT IS " + count);
 			if (count >= tempSuperMatrix.length) {
-
+				System.out.println("HERE");
 				return true;
 			}
 			else {
@@ -432,30 +432,29 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		
 	}
 	
-	static int minimax(char[][] game, int depth, int alpha, int beta, boolean isMax) {
+	static int minimax(int alpha, int beta, boolean isMax) {
 		tempCheckAvailable();
-		System.out.println("depth = " + depth);
 //		printMatrix();
 		
-		if (depth == 0 || finished()) {
-			System.out.println("REACHED THE END");
+		if (finished()) {
+			System.out.println("REACHED THE END, score = " + eval());
 			return eval();
 		}
 		
 		
 		if (isMax) {
-			System.out.println("isMax");
-			int bestScore = -9;
+//			System.out.println("isMax");
+			int bestScore = -1000;
 			for (int i = 0; i < tempAvailableMatrix.length; i++) {
 				for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
 					if (tempAvailableMatrix[i][j] == true) {
-						game[i][j] = 'O';
+						matrix[i][j] = 'O';
 						tempNextMatrix = j;
-						System.out.println("tempNM = " + tempNextMatrix);
+//						System.out.println("tempNM = " + tempNextMatrix);
 						int score = 0;
-						score = minimax(game, depth - 1, alpha, beta, false);
-						System.out.println("line 442 score = " + score);
-						game[i][j] = ' ';
+						score = minimax(alpha, beta, false);
+//						System.out.println("line 442 score = " + score);
+						matrix[i][j] = ' ';
 						alpha = Math.max(alpha, score);
 						bestScore = Math.max(score, bestScore);
 						if (beta <= alpha) {
@@ -468,18 +467,18 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		}
 		
 		else if (!isMax) {
-			System.out.println("isNotMax");
-			int bestScore = 9;
+//			System.out.println("isNotMax");
+			int bestScore = 1000;
 			for (int i = 0; i < tempAvailableMatrix.length; i++) {
 				for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
 					if (tempAvailableMatrix[i][j] == true) {
-						game[i][j] = 'X';
+						matrix[i][j] = 'X';
 						tempNextMatrix = j;
-						System.out.println("tempNM = " + tempNextMatrix);
+//						System.out.println("tempNM = " + tempNextMatrix);
 						int score = 0;
-						score = minimax(game, depth - 1, alpha, beta, true);
-						System.out.println("line 464 score = " + score);
-						game[i][j] = ' ';
+						score = minimax(alpha, beta, true);
+//						System.out.println("line 464 score = " + score);
+						matrix[i][j] = ' ';
 						beta = Math.min(beta, score);
 						bestScore = Math.min(score, bestScore);
 						if (beta <= alpha) {
