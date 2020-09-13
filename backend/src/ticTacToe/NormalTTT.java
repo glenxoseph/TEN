@@ -95,7 +95,7 @@ public class NormalTTT {
 		for (int i = 0; i < matrix.length; i++) {
 			if (matrix[i] == ' ') {
 				matrix[i] = turn;
-				int score = minimax(10, -100, 100, false);
+				int score = minimax(-100, 100, false);
 				System.out.println("SCORE at " + i + " is " + score);
 				matrix[i] = ' ';
 				if (score > bestScore) {
@@ -114,7 +114,7 @@ public class NormalTTT {
 	}
 	
 	
-	static int minimax(int depth, int alpha, int beta, boolean isMax) {
+	static int minimax(int alpha, int beta, boolean isMax) {
 		
 //		printMatrix();
 		
@@ -137,7 +137,7 @@ public class NormalTTT {
 				if (matrix[i] == ' ') {
 					matrix[i] = 'O';
 //					System.out.println("O at " + i);
-					int sc = minimax(depth - 1, alpha, beta, false);
+					int sc = minimax(alpha, beta, false);
 					matrix[i] = ' ';
 					alpha = Math.max(alpha, sc);
 					bestScore = Math.max(sc, bestScore);
@@ -155,7 +155,7 @@ public class NormalTTT {
 				if (matrix[i] == ' ') {
 					matrix[i] = 'X';
 //					System.out.println("X at " + i);
-					int sc = minimax(depth - 1, alpha, beta, true);
+					int sc = minimax(alpha, beta, true);
 					matrix[i] = ' ';
 					alpha = Math.min(alpha, sc);
 					bestScore = Math.min(sc, bestScore);
