@@ -24,14 +24,14 @@ public class TicTacToe {
 				matrix[i][j] = ' ';
 			}
 		}
-		
-		matrix[1][0] = 'O';
-		matrix[1][1] = 'X';	
-		matrix[1][2] = 'O';	
-		matrix[1][3] = 'X';	
-		matrix[1][4] = 'X';
-		matrix[1][5] = 'O';
-		matrix[1][6] = 'O';
+//		
+//		matrix[1][0] = 'O';
+//		matrix[1][1] = 'X';	
+//		matrix[1][2] = 'O';	
+//		matrix[1][3] = 'X';	
+//		matrix[1][4] = 'X';
+//		matrix[1][5] = 'O';
+//		matrix[1][6] = 'O';
 	}
 
 	static void assign() {
@@ -228,23 +228,25 @@ public class TicTacToe {
 			}
 		}
 
-		
+		// if first round, or next matrix is occupied, all true
 		if (nextMatrix == 9 || superMatrix[nextMatrix] != ' ') {
 			for (int i = 0; i < superMatrix.length; i++) {
 				if (superMatrix[i] == ' ') {
-					System.out.println(i + ", " + superMatrix[i]);
 					for (int j = 0; j < availableMatrix[i].length; j++) {
 						availableMatrix[i][j] = true;
 					}
 				}
 			}
 		}
+		
+		// else only next matrix ix true
 		else {
 			for (int i = 0; i < matrix[nextMatrix].length; i++) {
 				availableMatrix[nextMatrix][i] = true;
 			}
 		}
 		
+		// if occupied, false
 		for (int i = 0; i < availableMatrix.length; i++) {
 			for (int j = 0; j < availableMatrix[i].length; j++) {
 				if (matrix[i][j] != ' ') {
@@ -253,13 +255,14 @@ public class TicTacToe {
 			}
 		}
 		
-		for (int i = 0; i < availableMatrix.length; i++) {
-			for (int j = 0; j < availableMatrix[i].length; j++) {
-				if (availableMatrix[i][j] == true) {
-					System.out.println((i + 1) + ", " + (j + 1));
-				}
-			}
-		}
+		// print, can be commented
+//		for (int i = 0; i < availableMatrix.length; i++) {
+//			for (int j = 0; j < availableMatrix[i].length; j++) {
+//				if (availableMatrix[i][j] == true) {
+//					System.out.println((i + 1) + ", " + (j + 1));
+//				}
+//			}
+//		}
 	}
 	
 static boolean[][] tempAvailableMatrix = new boolean[9][9];
@@ -298,13 +301,13 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 			}
 		}
 		
-		for (int i = 0; i < tempAvailableMatrix.length; i++) {
-			for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
-				if (tempAvailableMatrix[i][j] == true) {
-					System.out.println((i + 1) + ", " + (j + 1));
-				}
-			}
-		}
+//		for (int i = 0; i < tempAvailableMatrix.length; i++) {
+//			for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
+//				if (tempAvailableMatrix[i][j] == true) {
+//					System.out.println((i + 1) + ", " + (j + 1));
+//				}
+//			}
+//		}
 	}
 	
 	static int tempNextMatrix;
@@ -318,7 +321,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 					aiCheckAvailable();
 					matrix[i][j] = 'O';
 					tempNextMatrix = j;
-					int score = minimax(matrix, 1, -100, 100, false);
+					int score = minimax(matrix, 100, -100, 100, false);
 					System.out.println("score at " + i + ", " + j + " is " + score);
 					matrix[i][j] = ' ';
 					if (score > bestScore) {
@@ -331,6 +334,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 			}
 		}
 		matrix[bestMove[0]][bestMove[1]] = 'O';
+		System.out.println("The O position is " + (bestMove[0] + 1) + ", " + (bestMove[1] + 1));
 		nextMatrix = bestMove[1];
 	}
 	
@@ -369,14 +373,17 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		
 		if (Xwon) {
 			score = -10;
+			System.out.println("X Won here!");
 		}
 		
 		else if (Owon) {
 			score = 10;
+			System.out.println("O Won here!");
 		}
 		
 		else if (tie) {
 			score = 0;
+			System.out.println("Tie here!");
 		}
 		
 		return score;
@@ -417,15 +424,17 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 	
 	static int minimax(char[][] game, int depth, int alpha, int beta, boolean isMax) {
 		tempCheckAvailable();
-		printMatrix();
+		System.out.println("depth = " + depth);
+//		printMatrix();
 		
 		if(depth == 0 || finished()) {
+			System.out.println("REACHED THE END");
 			return eval();
 		}
 		
 		
 		if (isMax) {
-			int bestScore = -100000;
+			int bestScore = -10000;
 			for (int i = 0; i < tempAvailableMatrix.length; i++) {
 				for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
 					if (tempAvailableMatrix[i][j] == true) {
@@ -433,7 +442,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 						tempNextMatrix = j;
 						System.out.println("temp = " + tempNextMatrix);
 						int score = minimax(game, depth - 1, alpha, beta, false);
-//						System.out.println("depth = " + depth);
+						System.out.println("line 442 score = " + score);
 						game[i][j] = ' ';
 						alpha = Math.max(alpha, score);
 						bestScore = Math.max(score, bestScore);
@@ -447,7 +456,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 		}
 		
 		else if (!isMax) {
-			int bestScore = 100000;
+			int bestScore = 10000;
 			for (int i = 0; i < tempAvailableMatrix.length; i++) {
 				for (int j = 0; j < tempAvailableMatrix[i].length; j++) {
 					if (tempAvailableMatrix[i][j] == true) {
@@ -455,6 +464,7 @@ static boolean[][] tempAvailableMatrix = new boolean[9][9];
 						tempNextMatrix = j;
 						System.out.println("temp = " + tempNextMatrix);
 						int score = minimax(game, depth - 1, alpha, beta, true);
+						System.out.println("line 464 score = " + score);
 						game[i][j] = ' ';
 						beta = Math.min(beta, score);
 						bestScore = Math.min(score, bestScore);
