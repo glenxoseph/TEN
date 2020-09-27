@@ -99,7 +99,7 @@ public class NormalTTT {
 			if (matrix[i] == ' ') {
 				matrix[i] = temp;
 				int score = minimax(-100, 100, false);
-				System.out.println("SCORE at " + i + " is " + score);
+				System.out.println("SCORE at " + (i + 1) + " is " + score);
 				matrix[i] = ' ';
 				if (score > bestScore) {
 					bestScore = score;
@@ -189,12 +189,12 @@ public class NormalTTT {
 			System.out.println(turn + "'s turn! ");
 			printMatrix();
 			if (turn == 'X') {
-//				makeMove();
-				ai();
-			}
-			else if (turn == 'O') {
 				makeMove();
 //				ai();
+			}
+			else if (turn == 'O') {
+//				makeMove();
+				ai();
 			}
 			if (checkWin() == 'X') {
 				printMatrix();
